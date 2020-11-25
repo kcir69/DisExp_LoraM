@@ -1,0 +1,92 @@
+---
+title: "Proyecto DiEx"
+output: html_notebook
+---
+
+# Relacion de TBI con los niveles de estres oxidativo en la corteza temporal
+
+```{r warning=FALSE}
+library(NeurocienciasIntroData)
+library(dplyr)
+library(pwr)
+```
+
+##### Para unir data set de donor.information y protein.pathology
+```{r}
+id_protein.p<-donor.information %>% full_join(protein.pathology,by =c("donor_id"))
+```
+
+##### Delimitar los data sets de acuerdo a la variable: con TBI (y) y sin TBI (n)
+```{r}
+tbi_y <- data.frame(filter(id_protein.p, age_at_first_tbi > 0 & isoprostane_pg_per_mg > 0))
+tbi_n <- data.frame (filter(id_protein.p, age_at_first_tbi == 0 & isoprostane_pg_per_mg > 0))
+```
+
+##### Boxplot de los niveles de isoprostane de individuos sin TBI
+```{r}
+boxplot(tbi_n$isoprostane_pg_per_mg, xlab = "Sin TBI", ylab = "Isoprostane (pg/mg)")
+```
+##### Boxplot de los niveles de isoprostane de individuos con TBI
+```{r}
+boxplot(tbi_y$isoprostane_pg_per_mg, xlab = "Con TBI", ylab = "Isoprostane (pg/mg)")
+```
+
+#### Ambos boxplots fusionados en uno 
+
+```{r}
+boxplot(id_protein.p$isoprostane_pg_per_mg ~ id_protein.p$age_at_first_tbi > 0, xlab = "TBI", ylab = "Isoprostane (pg/mg)")
+```
+
+#### Para clasificar por regiones (Temporal y parietal), en que region hay mayor isoprostane, cual es la mas afectada
+```{r}
+TCx_tbi_y <- data.frame(filter(tbi_y, structure_acronym == "TCx"))
+
+#datos filtrados, solo pocas columnas 
+
+TCX_tbi_y<-data.frame(TCx_tbi_y$donor_id, TCx_tbi_y$age_at_first_tbi,TCx_tbi_y$ever_tbi_w_loc,
+                      TCx_tbi_y$structure_id,TCx_tbi_y$isoprostane_pg_per_mg,TCx_tbi_y$structure_acronym)
+```
+```{r}
+TCx_tbi_n <- data.frame(filter(tbi_n, structure_acronym == "TCx"))
+#datos filtrados, solo pocas columnas 
+
+TCX_tbi_n<-data.frame(TCx_tbi_n$donor_id, TCx_tbi_n$age_at_first_tbi,TCx_tbi_n$ever_tbi_w_loc,
+                      TCx_tbi_n$structure_id,TCx_tbi_n$isoprostane_pg_per_mg,TCx_tbi_n$structure_acronym)
+```
+
+```{r}
+TCx <- data.frame(filter(id_protein.p, structure_acronym == "TCx" & isoprostane_pg_per_mg > 0))
+boxplot(TCx$isoprostane_pg_per_mg ~ TCx$age_at_first_tbi > 0, xlab = "TBI", ylab = "Isoprotane (pg/mg) en TCx")
+#datos filtrados, solo pocas columnas 
+
+TCX<-data.frame(TCx$donor_id, TCx$age_at_first_tbi,TCx$ever_tbi_w_loc,
+                      TCx$structure_id,TCx$isoprostane_pg_per_mg,TCx$structure_acronym) 
+```
+
+### Siguientes pasos: 
+
+- Ver la prueba estadistica que se debe utilizar: t-test
+
+- Como posible siguiente paso:
+    + Ver si a mayor estres oxidativo, hay mayor respuesta inflamatoria o viceversa 
+
+## Comprobar el tamanio necesario de muestra
+```{r}
+nrow(TCx_tbi_n)
+nrow(TCx_tbi_y)
+pwr.t.test(n = NULL, 
+           d = 0.8, 
+           sig.level = 0.05, 
+           type = "two.sample", 
+           alternative = "greater", 
+           power = 0.8)
+```
+
+#### 
+- Hay 32 individuos sin TBI y 30 individuos con TBI, ambos grupos con mediciones
+de isoprostane en corteza temporal 
+
+
+
+
+
