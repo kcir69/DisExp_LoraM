@@ -1,0 +1,191 @@
+---
+title: "TBI" 
+output:
+  html_document:
+    df_print: paged
+  pdf_document: default
+---
+# **Marco teórico **
+Marco teórico acotado a la pregunta de investigación,  
+
+ - El traumatismo cerebral (TBI), es una lesión causada por un factor externo, como un golpe en la cabeza o una herida; además, el TBI tiene que tener al menos una de las siguientes características:
+  + Pérdida de conocimiento 
+  + Amnesia
+  + Fractura en el cráneo
+  + convulsión postraumática  
+  + ecografía anormal 
+
+Generalmente, la lesión traumática resulta del impacto mecánico, lo que lleva a la compresión tisular, y al desgarro de la sustancia blanca y gris, y a la hemorragia subsiguiente. El grado de daño es estimado cuando se mide la duración de pérdida de conocimiento, la profundidad de la coma y el nivel de amnesia por medio de ecografías cerebrales, también se puede clasificar de acuerdo a la gravedad de la lesión que se dividen en primaria y secundaria. Estas ocurren al momento de la lesión; las más comunes son la fractura del cráneo, lesión localizada o lesión axonal difusa, las cuales, pueden ejercer presión en el cerebro por los huesos rotos, hematomas o hemorragia, lo cual resulta en la disminución de oxígeno en el cerebro a causa de la presión arterial baja o aumento de presión intracraneal debido a inflamación del tejido cerebral.  
+
+El daño del encéfalo puede provocar hematoma o anoxia, provocando así, estrés oxidativo, y llevar a la peroxidación de las membranas, desnaturalizando a las proteínas, carbohidratos y ADN, dañando la función de las proteínas de membrana, que funcionan como transportadores, la desregulación de las transferencias iónicas y un aumento de las cantidades de calcio, lo cual lleva a la muerte celular, ya sea mediada por necrosis o apoptosis, lo cual conlleva a la neurodegeneración. 
+
+
+Estas lesiones cerebrales son causantes del estrés oxidativo, porque las células lesionadas, así como las que están en lisis, liberan el hierro a los alrededores, lo que promueve la formación de OH-hemodinámicos que incluyen reducciones focales en el flujo sanguíneo cerebral, también existe el sistema NADPH oxidasa (superóxido sintetasa)/mieloperoxidasa, el cual se encuentra en la membrana de las células inflamatorias, y en el trauma, presenta una gran activación y produce cantidades importantes de O2 -. En circunstancias normales, la producción basal de radicales libres es equilibrada por vitaminas (E y C) y por enzimas intracelulares, como la superóxido dismutasa y las catalasas, sin embargo, por el exceso de especies reactivas de oxígeno potencialmente tóxicas (O2,H2O2,OH) se genera un desbalance de radicales libres que inducen una peroxidación no enzimática del ácido araquidónico y una producción elevada de isoprostanos, los cuales funcionan como marcadores biológicos que ayudan a detectar la Enfermedad de Alzheimer.
+
+
+
+La presencia de 3-amiloides enfatiza la capacidad de iniciar la peroxidación lipídica, debido a la presencia de lípidos oxidados y a la disminución de actividad de enzimas antioxidantes, por esto, existe la formación de placas seniles de proteína amiloide-B y la presencia de ovillos neurofibrilares de proteína TAU.Tomando en cuenta lo descrito anteriormente, se asume que el estrés oxidativo, es una posible causa de la enfermedad de Alzheimer.
+Cabe destacar que la carbonilación de proteínas como resultado del decaimiento inducido por el estrés oxidativo, se ha observado en los lóbulos frontal, temporal y parietal de la corteza cerebral, así como en el hipocampo.  
+
+
+
+Aunque aún es un tema controversial, se ha observado que la peroxidación lipídica precede a la formación de las placas amiloides, usando este razonamiento, podemos inferir que la peroxidación lipídica es causada por el estrés oxidativo, a su vez este puede ser la consecuencia de los daños cerebrales producidos por TBI. Teniendo en cuenta que los isoprostanos funcionan como marcadores de estrés oxidativo, se quiere hacer un análisis de datos, relacionando la presencia de estrés oxidativo como consecuencia de TBI. 
+
+
+# **Hipótesis**:
+Sujetos con TBI tendrán  mayores cantidad de isoprostanos en corteza	temporal. (Medida para detectar los niveles de estrés oxidativo).
+	
+# **Objetivos**: 
+Hacer una comparativa entre los niveles de estrés oxidativo y la presencia de traumatismo craneoencefálico (TBI).
+
+# **Descripción de las variables involucradas**:
+
+ Variable independiente: Manifestación de TBI 
+
+ Variable dependiente: Diferentes concentraciones de isoprostanos recolectadas	en la corteza temporal (TCx)
+
+La variable independiente serán los distintos valores tiene los sujetos, que van desde el 0 hasta el 3. A partir de estos la variable dependiente serán los nives de isoprostanos que se recolectaron. Estas medidas son para determinar cuantitativamente las concentraciones de estrés oxidativo que tuvieron los sujetos experimentales en la corteza temporal.
+
+El número de sujetos para cada grupo será de 20 a  partir de una prueba t.test
+
+# **Grupos**
+
+ - Grupo control; sujetos que no hayan tenido alguna manifestación de TBI, es decir 0
+
+ - Grupo tratamiento: Sujetos que haya tenido alguna manifestación de TBI (1:3)
+
+# **Análisis en Rstudio de los diferentes DataSet**
+
+
+## **Zona de librerias**
+```{r}
+
+library(NeurocienciasIntroData)
+library(dplyr)
+library(pwr)
+```
+## **Dataset a usar**
+```{r}
+
+#donor.information
+#protein.pathology
+
+```
+
+## **Eliminación de columnas no necesarias**
+
+```{r}
+nombresPP<-names(protein.pathology)
+nnomresDI<-names(donor.information)
+
+donor.information_<-select(donor.information,-name,- age, -sex,-apo_e4_allele,- education_years,-cerad, 
+                           -control_set, -nincds_arda_diagnosis, -race, -hispanic, -act_demented, -braak, -nia_reagan)
+protein.pathology_<-select(protein.pathology, -donor_name, -ihc_a_syn, -ihc_tau2_ffpe, -ihc_at8_ffpe, -ihc_at8, -ihc_ptdp_43_ffpe,
+                           -ihc_a_beta_ffpe, -ihc_a_beta, -ihc_iba1_ffpe, -ihc_gfap_ffpe, -ptau_ng_per_mg, -vegf_pg_per_mg, 
+                           -ab42_over_ab40_ratio, -il_6_pg_per_mg, -ab40_pg_per_mg, - mip_1a_pg_per_mg, -il_7_pg_per_mg, -a_syn_pg_per_mg, 
+                           -il_1b_pg_per_mg, -tnf_a_pg_per_mg, -tau_ng_per_mg, -ptau_over_tau_ratio, -ifn_g_pg_per_mg, -ab42_pg_per_mg, -il_10_pg_per_mg,
+                           -il_4_pg_per_mg, -mcp_1_pg_per_mg, -bdnf_pg_per_mg, -rantes_pg_per_mg)
+
+
+```
+
+### **Para unir data set de donor.information y protein.pathology**
+
+```{r}
+
+id_protein.p<-donor.information_ %>% full_join(protein.pathology_,by =c("donor_id"))
+names(id_protein.p)
+
+```
+
+
+
+#### **Delimitar los data sets de acuerdo a la variable: con TBI (y) y sin TBI (n)**
+```{r}
+
+tbi_y <- data.frame(filter(id_protein.p, age_at_first_tbi > 0 & isoprostane_pg_per_mg > 0))
+
+tbi_n <- data.frame (filter(id_protein.p, age_at_first_tbi == 0 & isoprostane_pg_per_mg > 0))
+
+```
+
+##### **Boxplot de los niveles de isoprostane de individuos sin TBI**
+```{r}
+boxplot(tbi_n$isoprostane_pg_per_mg, xlab = "Sin TBI", ylab = "Isoprostane (pg/mg)")
+```
+##### **Boxplot de los niveles de isoprostane de individuos con TBI**
+```{r}
+boxplot(tbi_y$isoprostane_pg_per_mg, xlab = "Con TBI", ylab = "Isoprostane (pg/mg)")
+```
+
+#### **Ambos boxplots fusionados en uno**
+
+```{r}
+boxplot(id_protein.p$isoprostane_pg_per_mg ~ id_protein.p$age_at_first_tbi > 0, xlab = "TBI", ylab = "Isoprostane (pg/mg)")
+```
+
+### *Corteza Temporal*
+```{r}
+TCx_tbi_y <- data.frame(filter(tbi_y, structure_acronym == "TCx"))
+TCx_tbi_n <- data.frame(filter(tbi_n, structure_acronym == "TCx"))
+
+```
+
+```{r}
+TCx <- data.frame(filter(id_protein.p, structure_acronym == "TCx" & isoprostane_pg_per_mg > 0))
+
+```
+
+### **Boxplot de región temporal**  
+
+```{r}
+boxplot(TCx$isoprostane_pg_per_mg ~ TCx$age > 0, xlab = "TBI", ylab = "Isoprotane (pg/mg) en TCx")
+
+```
+
+## Siguientes pasos: 
+
+- Ver la prueba estadistica que se debe utilizar: t-test
+
+- Como posible siguiente paso:
+    + Ver si a mayor estres oxidativo, hay mayor respuesta inflamatoria o viceversa 
+
+## Comprobar el tamaño necesario de muestra
+```{r}
+nrow(TCx_tbi_n)
+nrow(TCx_tbi_y)
+pwr.t.test(n = NULL, 
+           d = 0.8, 
+           sig.level = 0.05, 
+           type = "two.sample", 
+           alternative = "greater", 
+           power = 0.8)
+```
+
+## **Sujetos**
+- Con la prueba t.test anterior see requiren 20 sujetos. 
+
+- Hay 32 individuos sin TBI y 30 individuos con TBI, ambos grupos con mediciones
+de isoprostane en corteza temporal 
+
+# **Prueba de Students
+
+```{r}
+t.test(TCx_tbi_n$age_at_first_tbi, TCx_tbi_y$age_at_first_tbi)
+```
+# **Prueba de Shapiro-Wilks
+
+```{r}
+
+shapiro.test(TCx_tbi_n$isoprostane_pg_per_mg)
+shapiro.test(TCx_tbi_y$isoprostane_pg_per_mg)
+```
+Como nuestros datos son menores a la alfa entocnes se dice que rechaza la hipotesis nula, por lo que la alternativa tendrá efecto. Además que su distribución será diferente a la normal; para averiguar cual se requiere realziar diferentes tipos de pruebas. 
+
+
+### **Bibiliogragía**
+ - Khatri N, Thakur M, Pareek V, Kumar S, Sharma S, Datusalia AK. Oxidative Stress: Major Threat in Traumatic Brain Injury. CNS Neurol Disord Drug Targets. 2018;17(9):689-695. doi: 10.2174/1871527317666180627120501. PMID: 29952272.
+ - Ramos-Cejudo, J., Wisniewski, T., Marmar, C., Zetterberg, H., Blennow, K., de Leon, M. J., & Fossati, S. (2018). Traumatic Brain Injury and Alzheimer's Disease: The Cerebrovascular Link. EBioMedicine, 28, 21–30. https://doi.org/10.1016/j.ebiom.2018.01.021
+ - Montine TJ, Montine KS, McMahan W, Markesbery WR, Quinn JF, Morrow JD. F2-isoprostanes in Alzheimer and other neurodegenerative diseases. Antioxid Redox Signal. 2005 Jan-Feb;7(1-2):269-75. doi: 10.1089/ars.2005.7.269. PMID: 15650414.
+
+
