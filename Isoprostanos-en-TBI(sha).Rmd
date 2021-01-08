@@ -1,0 +1,360 @@
+---
+title: "Isoprostanos en función de TBI"
+author: Lora Obed , Rubio Ángel, Salazar Marelly, Sandoval César, Vazquez Samantha,
+  Vilchis Hazel
+date: "null"
+output:
+  pdf_document: default
+  word_document: default
+  html_document:
+    df_print: paged
+---
+## **Marco teórico **
+Marco teórico acotado a la pregunta de investigación,  
+
+ - El traumatismo cerebral (TBI), es una lesión causada por un factor externo, como un golpe en la cabeza o una herida; además, el TBI tiene que tener al menos una de las siguientes características:
+  + Pérdida de conocimiento 
+  + Amnesia
+  + Fractura en el cráneo
+  + convulsión postraumática  
+  + ecografía anormal 
+
+Generalmente, la lesión traumática resulta del impacto mecánico, lo que lleva a la compresión tisular, y al desgarro de la sustancia blanca y gris, y a la hemorragia subsiguiente. El grado de daño es estimado cuando se mide la duración de pérdida de conocimiento, la profundidad de la coma y el nivel de amnesia por medio de ecografías cerebrales, también se puede clasificar de acuerdo a la gravedad de la lesión que se dividen en primaria y secundaria. Estas ocurren al momento de la lesión; las más comunes son la fractura del cráneo, lesión localizada o lesión axonal difusa, las cuales, pueden ejercer presión en el cerebro por los huesos rotos, hematomas o hemorragia, lo cual resulta en la disminución de oxígeno en el cerebro a causa de la presión arterial baja o aumento de presión intracraneal debido a inflamación del tejido cerebral.  
+
+El daño del encéfalo puede provocar hematoma o anoxia, provocando así, estrés oxidativo, y llevar a la peroxidación de las membranas, desnaturalizando a las proteínas, carbohidratos y ADN, dañando la función de las proteínas de membrana, que funcionan como transportadores, la desregulación de las transferencias iónicas y un aumento de las cantidades de calcio, lo cual lleva a la muerte celular, ya sea mediada por necrosis o apoptosis, lo cual conlleva a la neurodegeneración. 
+
+
+Estas lesiones cerebrales son causantes del estrés oxidativo, porque las células lesionadas, así como las que están en lisis, liberan el hierro a los alrededores, lo que promueve la formación de OH-hemodinámicos que incluyen reducciones focales en el flujo sanguíneo cerebral, también existe el sistema NADPH oxidasa (superóxido sintetasa)/mieloperoxidasa, el cual se encuentra en la membrana de las células inflamatorias, y en el trauma, presenta una gran activación y produce cantidades importantes de O2 -. En circunstancias normales, la producción basal de radicales libres es equilibrada por vitaminas (E y C) y por enzimas intracelulares, como la superóxido dismutasa y las catalasas, sin embargo, por el exceso de especies reactivas de oxígeno potencialmente tóxicas (O2,H2O2,OH) se genera un desbalance de radicales libres que inducen una peroxidación no enzimática del ácido araquidónico y una producción elevada de isoprostanos, los cuales funcionan como marcadores biológicos que ayudan a detectar la Enfermedad de Alzheimer.
+
+
+
+La presencia de 3-amiloides enfatiza la capacidad de iniciar la peroxidación lipídica, debido a la presencia de lípidos oxidados y a la disminución de actividad de enzimas antioxidantes, por esto, existe la formación de placas seniles de proteína amiloide-B y la presencia de ovillos neurofibrilares de proteína TAU.Tomando en cuenta lo descrito anteriormente, se asume que el estrés oxidativo, es una posible causa de la enfermedad de Alzheimer.
+Cabe destacar que la carbonilación de proteínas como resultado del decaimiento inducido por el estrés oxidativo, se ha observado en los lóbulos frontal, temporal y parietal de la corteza cerebral, así como en el hipocampo.  
+
+
+
+Aunque aún es un tema controversial, se ha observado que la peroxidación lipídica precede a la formación de las placas amiloides, usando este razonamiento, podemos inferir que la peroxidación lipídica es causada por el estrés oxidativo, a su vez este puede ser la consecuencia de los daños cerebrales producidos por TBI. Teniendo en cuenta que los isoprostanos funcionan como marcadores de estrés oxidativo, se quiere hacer un análisis de datos, relacionando la presencia de estrés oxidativo como consecuencia de TBI. 
+
+
+## **Hipótesis**:
+Sujetos con TBI tendrán  mayores cantidad de isoprostanos en corteza	temporal. (Medida para detectar los niveles de estrés oxidativo).
+	
+## **Objetivos**: 
+Hacer una comparativa entre los niveles de estrés oxidativo y la presencia de traumatismo craneoencefálico (TBI).
+
+## **Descripción de las variables involucradas**:
+
+ Variable independiente: Manifestación de TBI 
+
+ Variable dependiente: Diferentes concentraciones de isoprostanos recolectadas	en la corteza temporal (TCx)
+
+La variable independiente serán los distintos valores tiene los sujetos, que van desde el 0 hasta el 3. A partir de estos la variable dependiente serán los nives de isoprostanos que se recolectaron. Estas medidas son para determinar cuantitativamente las concentraciones de estrés oxidativo que tuvieron los sujetos experimentales en la corteza temporal.
+
+El número de sujetos para cada grupo será de 20 a  partir de una prueba t.test
+
+## **Grupos**
+
+ - Grupo control; sujetos que no hayan tenido alguna manifestación de TBI, es decir 0
+
+ - Grupo tratamiento: Sujetos que haya tenido alguna manifestación de TBI (1:3)
+
+## **Análisis en Rstudio de los diferentes DataSet**
+
+```{r setup, include=FALSE}
+library(NeurocienciasIntroData)
+library(tidyverse)
+library(dplyr)
+library(pwr)
+library(ggplot2)
+#install.packages("MASS")
+#install.packages("survival")
+library(MASS)
+
+library(survival)
+library(fitdistrplus)
+```
+
+## **Data set a utilizar**
+### **Donor.information**
+```{r echo=FALSE}
+donor.information_<-donor.information
+head(donor.information_)
+
+```
+### **protein.pathology**
+```{r echo=FALSE}
+protein.pathology_<-protein.pathology
+head(protein.pathology_)
+
+```
+
+## **Datos, orden y limpieza de los datos**
+
+```{r include=FALSE}
+
+protein.pathology_<-protein.pathology_%>%
+  dplyr::select(donor_id, isoprostane_pg_per_mg, structure_acronym)
+donor.information_<-donor.information_%>%
+  dplyr::select(donor_id, age, age_at_first_tbi,
+                dsm_iv_clinical_diagnosis,longest_loc_duration,
+                num_tbi_w_loc, ever_tbi_w_loc,sex,education_years)
+
+id_protein.p<-donor.information_ %>% full_join(protein.pathology_,by =c("donor_id"))
+names(id_protein.p)
+
+
+
+tbi_y <- data.frame(filter(id_protein.p, age_at_first_tbi > 0 & 
+                             isoprostane_pg_per_mg > 0))
+tbi_n <- data.frame (filter(id_protein.p, age_at_first_tbi == 0 &
+                              isoprostane_pg_per_mg > 0))
+
+```
+### **Datos con TBI**
+```{r echo=FALSE}
+head(tbi_y)
+
+```
+### **Datos sin TBI**
+```{r echo=FALSE}
+head(tbi_n)
+
+```
+
+
+## **Data set de la Corteza Temporal**
+```{r echo=FALSE}
+TCx_tbi_y<-tbi_y%>%
+  filter(structure_acronym == "TCx")
+TCx_tbi_n<-tbi_n%>%
+  filter(structure_acronym == "TCx")
+
+TCx<-TCx_tbi_y%>% full_join(TCx_tbi_y,by =c("donor_id"))
+
+```
+
+#### **Corteza temporal con TBI**
+```{r echo=FALSE}
+head(TCx_tbi_y) 
+```
+#### **Corteza temporal sin TBI**
+```{r echo=FALSE}
+head(TCx_tbi_n) 
+```
+
+
+
+#### **Tamaño de a muestra con TBI**
+```{r echo=FALSE}
+nrow(TCx_tbi_n)
+
+```
+#### **sin TBI**
+```{r echo=FALSE}
+nrow(TCx_tbi_y)
+
+```
+
+## **Cantidad de sujetos minimo para el estudio**
+```{r echo=FALSE}
+pwr.t.test(n = NULL, 
+           d = 0.8, 
+           sig.level = 0.05, 
+           type = "two.sample", 
+           alternative = "greater", 
+           power = 0.8)
+```
+
+## **Sujetos**
+
+- Con la prueba t.test anterior see requiren 20 sujetos. 
+
+- Hay 32 individuos sin TBI y 30 individuos con TBI, ambos grupos con mediciones
+de isoprostane en corteza temporal.
+
+
+
+## **Hacemos la estadística descriptiva de la muestra**
+
+### **Media, mediana y desviación estandar**
+```{r  echo=FALSE}
+estaDescr<-function(x){
+  c(media=mean(x,na.rm = TRUE), 
+    mediana=median(x,na.rm = TRUE),
+    desviacion_e=sd(x,na.rm = TRUE))}
+
+TCx_tbi_y_<-TCx_tbi_y%>%
+  dplyr::select(num_tbi_w_loc,isoprostane_pg_per_mg,age_at_first_tbi)
+TCx_tbi_n_<-TCx_tbi_n%>%
+  dplyr::select(isoprostane_pg_per_mg) 
+  
+lapply(TCx_tbi_y_, estaDescr)
+lapply(TCx_tbi_n_, estaDescr)
+
+```
+### **Intervalos de confianza**
+
+```{r include=FALSE}
+intervalo95<-function(x,y,z){
+  a<- (y+(1.96*(x/sqrt(z))))
+  print("intervalo superior")
+  print(a)
+  b<-(y-(1.96*(x/sqrt(z))))
+  print("Intervalo inferior")
+  print(b)
+  }
+```
+#### **Intervalos para el grupo con TBI**
+```{r echo=FALSE}
+intervalo95(x=1.31849, y=3.037520, z=66)
+```
+#### **Intervalos para el grupo sn TBI**
+
+```{r echo=FALSE}
+intervalo95(x=1.262854, y=2.968923, z=66)
+```
+
+##### **Revisar si nuestros datos siguen una distribución normal**    
+```{r  echo=FALSE}
+shapiro.test(TCx_tbi_y$isoprostane_pg_per_mg)
+```
+Al salir como resultado menos a 0.05 entonces decimos que la muestra proviene de una distribución normal; se acepta la hipotesis nula (H0).
+
+
+### **Otra para determinar si nuestros datos siguen normalidad**
+
+```{r echo=FALSE}
+qqnorm(TCx_tbi_y$isoprostane_pg_per_mg)
+qqline(TCx_tbi_y$isoprostane_pg_per_mg,col="red", lw=2)
+```
+
+
+
+## **Distribución**
+
+En vista de que los datos no siguen una distribución normal (pero si provienen de una), lo siguente es encontrar cual es la distribución más próxima de nuestro grupo de interés. 
+
+```{r echo=FALSE}
+descdist(TCx_tbi_y$isoprostane_pg_per_mg, boot=100)
+```
+Podemos afirmar entonces que la distribución que siguen los datos es una distribución de tipo B. Como se puede ver en los puntos amarillos, multiples repeticiones (100) tiende a ser una distribución normal.
+
+
+## **Prueba parametrica**
+
+Para saber que prueba parametrica usar es necesario hacer un homogeneidad entre las varianzas. Para ello usamos eltest de Bartlett
+
+```{r echo=FALSE}
+bartlett.test(list(TCx_tbi_y$isoprostane_pg_per_mg, TCx_tbi_n$isoprostane_pg_per_mg))
+```
+Al hacer el test se muestra que no hay diferencias signifcativas por lo tanto ambas varianzas son homogeneas. Se prosigue hacer una prueba de T. student
+
+```{r echo=FALSE}
+t.test(TCx_tbi_y$isoprostane_pg_per_mg,TCx_tbi_n$isoprostane_pg_per_mg)
+
+```
+El valor de p>0.05 entonces se rechaza la hipotesis alternativa, por lo tanto no hay efectos estadísticamente significativos.
+
+
+## **Gráficos de los resultados**
+
+### **Patologías en el grupo con tbi**
+```{r echo=FALSE}
+ggplot(TCx_tbi_y, aes(x=factor(dsm_iv_clinical_diagnosis)))+
+  geom_bar(stat="count", width=0.7, fill="steelblue")+
+  theme_bw() + labs(title = "Patologías en el grupo con tbi", x = "Diagnóstico clínico", y = "Cantidad de sujetos") + scale_y_continuous(breaks=seq(0,12, by = 2)) + theme(axis.text.x = element_text(size=7)) + geom_text(stat='count', aes(label=..count..), vjust=-1) + coord_cartesian(ylim=c(0,13))
+```
+
+### ** Patologías sin TBI**
+```{r echo=FALSE}
+ggplot(TCx_tbi_n, aes(x=factor(dsm_iv_clinical_diagnosis)))+
+  geom_bar(stat="count", width=0.7, fill="steelblue")+
+  theme_bw()+ labs(title = "Patologías en el grupo sin tbi", x = "Diagnóstico clínico", y = "Cantidad de sujetos") + scale_y_continuous(breaks=seq(0,20, by = 2)) + geom_text(stat='count', aes(label=..count..), vjust=-1) + coord_cartesian(ylim=c(0,20))
+```
+
+
+```{r echo=FALSE}
+id_protein.p %>%
+  filter(structure_acronym == "TCx", isoprostane_pg_per_mg > 0) %>%
+  ggplot(aes(x=factor(dsm_iv_clinical_diagnosis), fill = age_at_first_tbi>0)) + geom_bar(stat = "count", position = "dodge") + theme_bw()+
+  labs(title = "Patologías en ambos grupos", x = "Diagnóstico clínico", y = "Cantidad de sujetos", fill = "TBI") +
+  scale_y_continuous(breaks=seq(0,20, by = 2))  + coord_cartesian(ylim=c(0,20)) + theme(axis.text.x = element_text(size=6.3))
+```
+```{r echo=FALSE}
+
+number_TBI<-as.factor(TCx_tbi_y$num_tbi_w_loc)
+categoricaNumber<-as.character(number_TBI)
+TCx_tbi_y$num_tbi_w_loc<-categoricaNumber
+
+q<-ggplot(TCx_tbi_y, aes(y=isoprostane_pg_per_mg, x=num_tbi_w_loc,
+                         xlab= "número de TBI", ylab="Concentración de Isoprostanos"))+
+                          geom_boxplot(color="black", fill="steelblue")+
+                          ggtitle("Isoprostanos en función de TBI's")
+
+q+ labs(x="Número de TBI", y="Concentración de Isoprostanos")+theme_minimal()
+
+```
+
+
+## **Gráficos sin presencia de TBI**
+
+
+```{r echo=FALSE}
+
+number_TBI<-as.factor(TCx_tbi_n$num_tbi_w_loc)
+categoricaNumber<-as.character(number_TBI)
+TCx_tbi_n$num_tbi_w_loc<-categoricaNumber
+
+
+
+m<-ggplot(TCx_tbi_n, aes(y=isoprostane_pg_per_mg, x=(num_tbi_w_loc), fill=dsm_iv_clinical_diagnosis, xlab= "número de TBI", ylab="cocnentración de Isoprostanos"))+
+  geom_boxplot()+
+  ggtitle("Isoprostanos en función de TBI's")
+
+m+ labs(x="", y="Concentración de Isoprostanos")+theme_minimal()
+
+```
+# **Discusión**
+A pesar de que el nivel de isoprostanos funciona como marcador de la presencia de estrés oxidativo, y que el estrés oxidativo es una consecuencia del TBI, los resultados obtenidos, nos muestran que no hay una relación significativa entre personas que sufrieron de TBI y el nivel de isoprostanos obtenidos. Aunque sí se observó un ligero aumento del nivel de isoprostanos en los pacientes que sufrieron TBI en comparación a los pacientes que no, por lo que es posible asumir que el TBI no es un factor determinante del estrés oxidativo, pero si se puede considerar como un factor de riesgo.
+El estudio ha implicado recopilar los datos de dos dataset, obtenidos de un mismo estudio con la finalidad de relacionar los datos de pacientes que tuvieron TBI con su medición de isoprostanos en la corteza temporal, donde se eliminaron aquellos pacientes que no tenían las mediciones correspondientes dentro del dataset. 
+Dentro de la limitaciones del estudio está la muestra, ya que algunos sujetos de nuestra población  presentaban Alzheimer u otro tipo de demencia, pese a esto todos fueron puestos en el mismo grupo de estudio. Además tomamos en cuenta sólo los niveles de isoprostanos en la corteza temporal, por ende las futuros estudios comparativos podrán dar enfoque del nivel de isoprostanos en distintas localizaciones del cerebro y en distintas condiciones patológicas de manera más específica, aunado a estos estudios  una población más rica culturalmente o centrándose en una población particular.
+
+
+# **Conclusión**
+La evidencia de la relación entre TBI y el daño que sufre la masa encefálica nos provee una ventana informativa acerca de la toxicidad y las especies reactivas en el SNC. Nuestros análisis representan la relación directa entre TBI y nivel de isoprostanos presentes en la corteza temporal. Sugiriendo que no existe esta relación de manera clara y recíproca, aunque no negamos que esté presente en otras áreas del cerebro.
+
+
+# **Referencias**
+ - Khatri N, Thakur M, Pareek V, Kumar S, Sharma S, Datusalia AK. Oxidative Stress: Major Threat in Traumatic Brain Injury. CNS Neurol Disord Drug Targets. 2018;17(9):689-695. doi: 10.2174/1871527317666180627120501. PMID: 29952272.
+ - Ramos-Cejudo, J., Wisniewski, T., Marmar, C., Zetterberg, H., Blennow, K., de Leon, M. J., & Fossati, S. (2018). Traumatic Brain Injury and Alzheimer's Disease: The Cerebrovascular Link. EBioMedicine, 28, 21–30. https://doi.org/10.1016/j.ebiom.2018.01.021
+ - Montine TJ, Montine KS, McMahan W, Markesbery WR, Quinn JF, Morrow JD. F2-isoprostanes in Alzheimer and other neurodegenerative diseases. Antioxid Redox Signal. 2005 Jan-Feb;7(1-2):269-75. doi: 10.1089/ars.2005.7.269. PMID: 15650414.
+- http://aging.brain-map.org
+- Ramos-Cejudo, J., Wisniewski, T., Marmar, C., Zetterberg, H., Blennow, K., de Leon, M. J., & Fossati, S. (2018). Traumatic Brain Injury and Alzheimer's Disease: The Cerebrovascular Link. EBioMedicine, 28, 21–30. https://doi.org/10.1016/j.ebiom.2018.01.021
+- https://msktc.org/lib/docs/Factsheets/Spanish_Factsheets/TBI_Understanding_Part1_Sp.pdf
+- https://bookdown.org/dietrichson/metodos-cuantitativos/prueba-de-signos.html
+- TECHNICAL WHITEPAPER: ACT COHORT. (2017). Recuperado: https://help.brain-map.org/download/attachments/9895983/ACT_Cohort.pdf?version=2&modificationDate=1492728684163&api=v2
+- TECHNICAL WHITEPAPER: TISSUE COLLECTION. (2017). Recuperado de: https://help.brain-map.org/download/attachments/9895983/TBI_Tissue_Collection.pdf?version=1&modificationDate=1456363435277&api=v2
+- TECHNICAL WHITEPAPER: QUANTITIVE DATA GENERATION. (2017). Recuperado de https://help.brain-map.org/download/attachments/9895983/TBI_Quantitative_data_generation.pdf?version=1&modificationDate=1456179397717&api=v2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
