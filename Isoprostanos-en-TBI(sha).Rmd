@@ -4,10 +4,10 @@ author: Lora Obed , Rubio Ángel, Salazar Marelly, Sandoval César, Vazquez Sama
   Vilchis Hazel
 date: "null"
 output:
-  pdf_document: default
-  word_document: default
-  html_document:
+  html_notebook:
     df_print: paged
+  word_document: default
+  pdf_document: default
 ---
 ## **Marco teórico **
 
