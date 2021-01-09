@@ -11,7 +11,11 @@ output:
 ---
 ## **Marco teórico **
 ### edit1, 2
+<<<<<<< HEAD
 ## kmra Céssaaaaaar
+=======
+### hola guapo xD
+>>>>>>> 81582953e391794e0acc5b6e3e3d4af81a74f428
 Marco teórico acotado a la pregunta de investigación,  
 
  - El traumatismo cerebral (TBI), es una lesión causada por un factor externo, como un golpe en la cabeza o una herida; además, el TBI tiene que tener al menos una de las siguientes características:
