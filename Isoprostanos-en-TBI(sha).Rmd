@@ -10,8 +10,6 @@ output:
     df_print: paged
 ---
 ## **Marco teórico **
-### edit1, 2
-Hola guapo xD
 
 Marco teórico acotado a la pregunta de investigación,  
 
