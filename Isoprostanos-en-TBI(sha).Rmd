@@ -73,6 +73,7 @@ library(MASS)
 
 library(survival)
 library(fitdistrplus)
+library(effsize)
 ```
 
 ## **Data set a utilizar**
