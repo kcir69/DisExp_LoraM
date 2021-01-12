@@ -5,6 +5,7 @@ author: Lora Obed , Rubio Ángel, Salazar Marelly, Sandoval César, Vazquez Sama
 output: html_notebook
 ---
 ## **Marco teórico **
+dfddfdf
 
 Marco teórico acotado a la pregunta de investigación,  
 
