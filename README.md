@@ -1,2 +1,2 @@
-# Dise-o_expe
+mi_repo
 Proyecto Diseño

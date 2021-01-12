@@ -5,7 +5,6 @@ author: Lora Obed , Rubio Ángel, Salazar Marelly, Sandoval César, Vazquez Sama
 output: html_notebook
 ---
 ## **Marco teórico **
-dfddfdf
 
 Marco teórico acotado a la pregunta de investigación,  
 
@@ -63,8 +62,6 @@ library(tidyverse)
 library(dplyr)
 library(pwr)
 library(ggplot2)
-#install.packages("MASS")
-#install.packages("survival")
 library(MASS)
 library(effsize)
 library(survival)
@@ -353,8 +350,8 @@ La evidencia de la relación entre TBI y el daño que sufre la masa encefálica 
 
 
 
-
-
+Hola Riiiiiccccckkk, senpai 2 XD
+x.x
 
 
 
