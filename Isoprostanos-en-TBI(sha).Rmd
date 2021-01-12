@@ -3,11 +3,7 @@ title: "Isoprostanos en función de TBI"
 author: Lora Obed , Rubio Ángel, Salazar Marelly, Sandoval César, Vazquez Samantha,
   Vilchis Hazel
 date: "null"
-output:
-  html_notebook:
-    df_print: paged
-  word_document: default
-  pdf_document: default
+output: html_notebook
 ---
 ## **Marco teórico **
 
