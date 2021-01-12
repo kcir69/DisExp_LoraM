@@ -264,7 +264,7 @@ En vista de que los datos no siguen una distribución normal (pero si provienen 
 ```{r echo=FALSE}
 descdist(TCx_tbi_y$isoprostane_pg_per_mg, boot=100)
 ```
-Podemos afirmar entonces que la distribución que siguen los datos es una distribución de tipo B. Como se puede ver en los puntos amarillos, multiples repeticiones (100) tiende a ser una distribución normal.
+Podemos afirmar entonces que la distribución que siguen los datos es una distribución de tipo B. Como se puede ver en los puntos amarillos y  multiples repeticiones (100) tiende a ser una distribución normal.
 
 
 ## **Prueba parametrica**
