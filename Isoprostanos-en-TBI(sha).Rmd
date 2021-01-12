@@ -130,7 +130,7 @@ TCx_tbi_y<-tbi_y%>%
 TCx_tbi_n<-tbi_n%>%
   filter(structure_acronym == "TCx")
 
-TCx<-TCx_tbi_y%>% full_join(TCx_tbi_y,by =c("donor_id"))
+TCx<-data.frame (filter(id_protein.p, isoprostane_pg_per_mg > 0 & structure_acronym == "TCx"))
 
 ```
 
