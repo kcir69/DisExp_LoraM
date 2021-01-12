@@ -156,6 +156,32 @@ nrow(TCx_tbi_y)
 
 ```
 
+## Gráficas para representar a los grupos
+
+### **Patologías en el grupo con tbi**
+```{r echo=FALSE}
+ggplot(TCx_tbi_y, aes(x=factor(dsm_iv_clinical_diagnosis)))+
+  geom_bar(stat="count", width=0.7, fill="steelblue")+
+  theme_bw() + labs(title = "Patologías en el grupo con tbi", x = "Diagnóstico clínico", y = "Cantidad de sujetos") + scale_y_continuous(breaks=seq(0,12, by = 2)) + theme(axis.text.x = element_text(size=7)) + geom_text(stat='count', aes(label=..count..), vjust=-1) + coord_cartesian(ylim=c(0,13))
+```
+
+### ** Patologías sin TBI**
+```{r echo=FALSE}
+ggplot(TCx_tbi_n, aes(x=factor(dsm_iv_clinical_diagnosis)))+
+  geom_bar(stat="count", width=0.7, fill="steelblue")+
+  theme_bw()+ labs(title = "Patologías en el grupo sin tbi", x = "Diagnóstico clínico", y = "Cantidad de sujetos") + scale_y_continuous(breaks=seq(0,20, by = 2)) + geom_text(stat='count', aes(label=..count..), vjust=-1) + coord_cartesian(ylim=c(0,20))
+```
+
+
+```{r echo=FALSE}
+id_protein.p %>%
+  filter(structure_acronym == "TCx", isoprostane_pg_per_mg > 0) %>%
+  ggplot(aes(x=factor(dsm_iv_clinical_diagnosis), fill = age_at_first_tbi>0)) + geom_bar(stat = "count", position = "dodge") + theme_bw()+
+  labs(title = "Patologías en ambos grupos", x = "Diagnóstico clínico", y = "Cantidad de sujetos", fill = "TBI") +
+  scale_y_continuous(breaks=seq(0,20, by = 2))  + coord_cartesian(ylim=c(0,20)) + theme(axis.text.x = element_text(size=6.3))
+```
+
+
 ## **Cantidad de sujetos minimo para el estudio**
 ```{r echo=FALSE}
 pwr.t.test(n = NULL, 
@@ -259,28 +285,6 @@ El valor de p>0.05 entonces se rechaza la hipotesis alternativa, por lo tanto no
 
 ## **Gráficos de los resultados**
 
-### **Patologías en el grupo con tbi**
-```{r echo=FALSE}
-ggplot(TCx_tbi_y, aes(x=factor(dsm_iv_clinical_diagnosis)))+
-  geom_bar(stat="count", width=0.7, fill="steelblue")+
-  theme_bw() + labs(title = "Patologías en el grupo con tbi", x = "Diagnóstico clínico", y = "Cantidad de sujetos") + scale_y_continuous(breaks=seq(0,12, by = 2)) + theme(axis.text.x = element_text(size=7)) + geom_text(stat='count', aes(label=..count..), vjust=-1) + coord_cartesian(ylim=c(0,13))
-```
-
-### ** Patologías sin TBI**
-```{r echo=FALSE}
-ggplot(TCx_tbi_n, aes(x=factor(dsm_iv_clinical_diagnosis)))+
-  geom_bar(stat="count", width=0.7, fill="steelblue")+
-  theme_bw()+ labs(title = "Patologías en el grupo sin tbi", x = "Diagnóstico clínico", y = "Cantidad de sujetos") + scale_y_continuous(breaks=seq(0,20, by = 2)) + geom_text(stat='count', aes(label=..count..), vjust=-1) + coord_cartesian(ylim=c(0,20))
-```
-
-
-```{r echo=FALSE}
-id_protein.p %>%
-  filter(structure_acronym == "TCx", isoprostane_pg_per_mg > 0) %>%
-  ggplot(aes(x=factor(dsm_iv_clinical_diagnosis), fill = age_at_first_tbi>0)) + geom_bar(stat = "count", position = "dodge") + theme_bw()+
-  labs(title = "Patologías en ambos grupos", x = "Diagnóstico clínico", y = "Cantidad de sujetos", fill = "TBI") +
-  scale_y_continuous(breaks=seq(0,20, by = 2))  + coord_cartesian(ylim=c(0,20)) + theme(axis.text.x = element_text(size=6.3))
-```
 ```{r echo=FALSE}
 
 number_TBI<-as.factor(TCx_tbi_y$num_tbi_w_loc)
