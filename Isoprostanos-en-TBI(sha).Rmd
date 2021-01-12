@@ -2,7 +2,6 @@
 title: "Isoprostanos en función de TBI"
 author: Lora Obed , Rubio Ángel, Salazar Marelly, Sandoval César, Vazquez Samantha,
   Vilchis Haz
-date: "null"
 output:
   pdf_document: default
   word_document: default
@@ -68,8 +67,6 @@ library(tidyverse)
 library(dplyr)
 library(pwr)
 library(ggplot2)
-#install.packages("MASS")
-#install.packages("survival")
 library(MASS)
 library(effsize)
 library(survival)
