@@ -174,6 +174,10 @@ id_protein.p %>%
   labs(title = "Patologías en ambos grupos", x = "Diagnóstico clínico", y = "Cantidad de sujetos", fill = "TBI") +
   scale_y_continuous(breaks=seq(0,20, by = 2))  + coord_cartesian(ylim=c(0,20)) + theme(axis.text.x = element_text(size=6.3))
 ```
+### **Gráfica de la concentración de isoprostanos recpecto a TCE**
+```{r}
+ggplot(TCx, aes(x = ever_tbi_w_loc == "Y", y = isoprostane_pg_per_mg, color = ever_tbi_w_loc == "Y")) + geom_boxplot() + labs(x = "TCE", y = "Concentración de isoprostanos", color = "TCE") + theme_minimal()
+```
 
 
 ## **Cantidad de sujetos minimo para el estudio**
