@@ -170,13 +170,15 @@ ggplot(TCx_tbi_n, aes(x=factor(dsm_iv_clinical_diagnosis)))+
 ```{r echo=FALSE}
 id_protein.p %>%
   filter(structure_acronym == "TCx", isoprostane_pg_per_mg > 0) %>%
-  ggplot(aes(x=factor(dsm_iv_clinical_diagnosis), fill = age_at_first_tbi>0)) + geom_bar(stat = "count", position = "dodge") + theme_bw()+
-  labs(title = "Patologías en ambos grupos", x = "Diagnóstico clínico", y = "Cantidad de sujetos", fill = "TBI") +
-  scale_y_continuous(breaks=seq(0,20, by = 2))  + coord_cartesian(ylim=c(0,20)) + theme(axis.text.x = element_text(size=6.3))
+  ggplot(aes(x=factor(dsm_iv_clinical_diagnosis), fill = age_at_first_tbi>0)) + geom_bar(stat = "count", position = "dodge") + theme_minimal()+
+  labs(title = "Patologías en ambos grupos", x = "Diagnóstico clínico", y = "Cantidad de sujetos") +
+  scale_y_continuous(breaks=seq(0,20, by = 2))  + coord_cartesian(ylim=c(0,20)) + theme(axis.text.x = element_text(size=6.3)) +
+  scale_fill_discrete(name = NULL, labels = c("Sin TCE", "Con TCE"))
 ```
 ### **Gráfica de la concentración de isoprostanos recpecto a TCE**
 ```{r}
-ggplot(TCx, aes(x = ever_tbi_w_loc == "Y", y = isoprostane_pg_per_mg, color = ever_tbi_w_loc == "Y")) + geom_boxplot() + labs(x = "TCE", y = "Concentración de isoprostanos", color = "TCE") + theme_minimal()
+ggplot(TCx, aes(x = ever_tbi_w_loc == "Y", y = isoprostane_pg_per_mg, color = ever_tbi_w_loc == "Y")) + geom_boxplot(show.legend = FALSE) + labs(x = NULL, y = "Concentración de isoprostanos") + scale_x_discrete(labels = c("Sin TCE", "Con TCE")) + 
+  theme_minimal()
 ```
 
 
@@ -353,9 +355,6 @@ La evidencia de la relación entre TBI y el daño que sufre la masa encefálica 
 
 
 
-
-Hola Riiiiiccccckkk, senpai 2 XD
-x.x
 
 
 
