@@ -144,6 +144,7 @@ pwr.t.test(n = NULL,
            type = "two.sample", 
            alternative = "greater", 
            power = 0.8)
+?pwr.t.test
 ```
 
 ## **Sujetos**
@@ -198,6 +199,7 @@ intervalo95(x=1.262854, y=2.968923, z=66)
 ##### **Revisar si nuestros datos siguen una distribución normal**    
 ```{r  echo=FALSE}
 shapiro.test(TCx_tbi_y$isoprostane_pg_per_mg)
+shapiro.test(TCx_tbi_n$isoprostane_pg_per_mg)
 ```
 Al salir como resultado menos a 0.05 entonces decimos que la muestra proviene de una distribución normal; se acepta la hipotesis nula (H0).
 
@@ -205,8 +207,14 @@ Al salir como resultado menos a 0.05 entonces decimos que la muestra proviene de
 ### **Otra para determinar si nuestros datos siguen normalidad**
 
 ```{r echo=FALSE}
-qqnorm(TCx_tbi_y$isoprostane_pg_per_mg)
+qqnorm(TCx_tbi_y$isoprostane_pg_per_mg, frame=FALSE, 
+       main= "Distribución de los datos en el grupo con TCE",
+       xlab="grupo con TCE")
 qqline(TCx_tbi_y$isoprostane_pg_per_mg,col="red", lw=2)
+qqnorm(TCx_tbi_n$isoprostane_pg_per_mg, frame=FALSE, 
+       main= "Distribución de los datos en el grupo sin TCE",
+       xlab="grupo sin TCE")
+qqline(TCx_tbi_n$isoprostane_pg_per_mg,col="red", lw=2)
 ```
 
 
